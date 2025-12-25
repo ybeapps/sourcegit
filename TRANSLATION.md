@@ -11,6 +11,10 @@ This document shows the translation status of each locale file in the repository
 <details>
 <summary>Missing keys in de_DE.axaml</summary>
 
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
+- Text.Configure.UseShellEnvironment
+- Text.Configure.UseShellEnvironment.Tip
 - Text.Hotkeys.Global.ShowWorkspaceDropdownMenu
 - Text.PageTabBar.Tab.MoveToWorkspace
 - Text.Preferences.DiffMerge.DiffArgs
@@ -27,6 +31,16 @@ This document shows the translation status of each locale file in the repository
 
 ### ![es__ES](https://img.shields.io/badge/es__ES-%E2%88%9A-brightgreen)
 
+<details>
+<summary>Missing keys in es_ES.axaml</summary>
+
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
+- Text.Configure.UseShellEnvironment
+- Text.Configure.UseShellEnvironment.Tip
+
+</details>
+
 ### ![fr__FR](https://img.shields.io/badge/fr__FR-98.04%25-yellow)
 
 <details>
@@ -34,6 +48,10 @@ This document shows the translation status of each locale file in the repository
 
 - Text.BranchCM.EditDescription
 - Text.CommitMessageTextBox.Placeholder
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
+- Text.Configure.UseShellEnvironment
+- Text.Configure.UseShellEnvironment.Tip
 - Text.EditBranchDescription
 - Text.EditBranchDescription.Target
 - Text.FileCM.CustomAction
@@ -66,7 +84,11 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitCM.Drop
 - Text.CommitMessageTextBox.Placeholder
 - Text.Configure.CommitMessageTemplate.BuiltinVars
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
 - Text.Configure.Git.ConventionalTypesOverride
+- Text.Configure.UseShellEnvironment
+- Text.Configure.UseShellEnvironment.Tip
 - Text.ConfigureCustomActionControls.StringValue.Tip
 - Text.DropHead
 - Text.DropHead.Commit
@@ -121,7 +143,11 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitDetail.Info.CopyNameAndEmail
 - Text.CommitMessageTextBox.Placeholder
 - Text.Configure.CommitMessageTemplate.BuiltinVars
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
 - Text.Configure.Git.ConventionalTypesOverride
+- Text.Configure.UseShellEnvironment
+- Text.Configure.UseShellEnvironment.Tip
 - Text.ConfigureCustomActionControls.StringValue.Tip
 - Text.Diff.Image.Difference
 - Text.DirtyState.HasLocalChanges
@@ -236,6 +262,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitMessageTextBox.Placeholder
 - Text.CommitMessageTextBox.SubjectCount
 - Text.Configure.CommitMessageTemplate.BuiltinVars
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
 - Text.Configure.CustomAction.Arguments.Tip
 - Text.Configure.CustomAction.InputControls
 - Text.Configure.CustomAction.InputControls.Edit
@@ -244,6 +272,8 @@ This document shows the translation status of each locale file in the repository
 - Text.Configure.CustomAction.Scope.Tag
 - Text.Configure.Git.ConventionalTypesOverride
 - Text.Configure.Git.PreferredMergeMode
+- Text.Configure.UseShellEnvironment
+- Text.Configure.UseShellEnvironment.Tip
 - Text.Configure.IssueTracker.AddSampleGerritChangeIdCommit
 - Text.Configure.IssueTracker.Share
 - Text.ConfigureCustomActionControls
@@ -528,6 +558,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitMessageTextBox.Placeholder
 - Text.CommitMessageTextBox.SubjectCount
 - Text.Configure.CommitMessageTemplate.BuiltinVars
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
 - Text.Configure.CustomAction.Arguments.Tip
 - Text.Configure.CustomAction.InputControls
 - Text.Configure.CustomAction.InputControls.Edit
@@ -538,6 +570,8 @@ This document shows the translation status of each locale file in the repository
 - Text.Configure.CustomAction.WaitForExit
 - Text.Configure.Git.ConventionalTypesOverride
 - Text.Configure.Git.PreferredMergeMode
+- Text.Configure.UseShellEnvironment
+- Text.Configure.UseShellEnvironment.Tip
 - Text.Configure.IssueTracker.AddSampleGerritChangeIdCommit
 - Text.Configure.IssueTracker.AddSampleGiteeIssue
 - Text.Configure.IssueTracker.AddSampleGiteePullRequest
@@ -812,6 +846,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitMessageTextBox.Placeholder
 - Text.CommitMessageTextBox.SubjectCount
 - Text.Configure.CommitMessageTemplate.BuiltinVars
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
 - Text.Configure.CustomAction.Arguments.Tip
 - Text.Configure.CustomAction.InputControls
 - Text.Configure.CustomAction.InputControls.Edit
@@ -820,6 +856,8 @@ This document shows the translation status of each locale file in the repository
 - Text.Configure.CustomAction.Scope.Tag
 - Text.Configure.Git.ConventionalTypesOverride
 - Text.Configure.Git.PreferredMergeMode
+- Text.Configure.UseShellEnvironment
+- Text.Configure.UseShellEnvironment.Tip
 - Text.Configure.IssueTracker.AddSampleGerritChangeIdCommit
 - Text.Configure.IssueTracker.Share
 - Text.ConfigureCustomActionControls
@@ -1047,6 +1085,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitMessageTextBox.Placeholder
 - Text.CommitMessageTextBox.SubjectCount
 - Text.Configure.CommitMessageTemplate.BuiltinVars
+- Text.Configure.CustomShell
+- Text.Configure.CustomShellArgs
 - Text.Configure.CustomAction.Arguments.Tip
 - Text.Configure.CustomAction.InputControls
 - Text.Configure.CustomAction.InputControls.Edit

@@ -149,6 +149,24 @@ namespace SourceGit.Models
             set;
         } = false;
 
+        public bool UseShellEnvironment
+        {
+            get;
+            set;
+        } = false;
+
+        public string CustomShellPath
+        {
+            get;
+            set;
+        } = string.Empty;
+
+        public string CustomShellArgs
+        {
+            get;
+            set;
+        } = string.Empty;
+
         public bool IncludeUntrackedWhenStash
         {
             get;

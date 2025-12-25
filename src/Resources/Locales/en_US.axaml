@@ -223,6 +223,10 @@
   <x:String x:Key="Text.Configure.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Configure.Git.AutoFetch" xml:space="preserve">Fetch remotes automatically</x:String>
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">Minute(s)</x:String>
+  <x:String x:Key="Text.Configure.UseShellEnvironment" xml:space="preserve">Use shell environment for git commands</x:String>
+  <x:String x:Key="Text.Configure.UseShellEnvironment.Tip" xml:space="preserve">Source shell profile to enable nvm, rbenv, pyenv, etc. in git hooks</x:String>
+  <x:String x:Key="Text.Configure.CustomShell" xml:space="preserve">Custom Shell Path</x:String>
+  <x:String x:Key="Text.Configure.CustomShellArgs" xml:space="preserve">Custom Shell Arguments</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Conventional Commit Types</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Default Remote</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Preferred Merge Mode</x:String>

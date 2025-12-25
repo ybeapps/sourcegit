@@ -44,7 +44,7 @@
           <TextBlock Classes="tab_header" Text="{DynamicResource Text.Configure.Git}"/>
         </TabItem.Header>
 
-        <Grid Margin="16,4,16,8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32" ColumnDefinitions="Auto,*">
+        <Grid Margin="16,4,16,8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,32,32,32" ColumnDefinitions="Auto,*">
           <TextBlock Grid.Row="0" Grid.Column="0"
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
@@ -193,6 +193,41 @@
                        Margin="5,0,0,0"
                        Text="{DynamicResource Text.Configure.Git.AutoFetchIntervalSuffix}" />
           </StackPanel>
+
+          <CheckBox Grid.Row="11" Grid.Column="1"
+                    Content="{DynamicResource Text.Configure.UseShellEnvironment}"
+                    IsChecked="{Binding UseShellEnvironment, Mode=TwoWay}"
+                    IsVisible="{OnPlatform False, macOS=True, Linux=True}">
+            <CheckBox.Styles>
+              <Style Selector="CheckBox:pointerover /template/ ContentPresenter">
+                <Setter Property="ToolTip.Tip" Value="{DynamicResource Text.Configure.UseShellEnvironment.Tip}"/>
+              </Style>
+            </CheckBox.Styles>
+          </CheckBox>
+
+          <TextBlock Grid.Row="12" Grid.Column="0"
+                     Text="{DynamicResource Text.Configure.CustomShell}"
+                     HorizontalAlignment="Right"
+                     Margin="0,0,8,0"
+                     IsVisible="{Binding UseShellEnvironment}"/>
+          <TextBox Grid.Row="12" Grid.Column="1"
+                   Height="28"
+                   CornerRadius="3"
+                   Text="{Binding CustomShellPath, Mode=TwoWay}"
+                   Watermark="{Binding DetectedShell}"
+                   IsVisible="{Binding UseShellEnvironment}"/>
+
+          <TextBlock Grid.Row="13" Grid.Column="0"
+                     Text="{DynamicResource Text.Configure.CustomShellArgs}"
+                     HorizontalAlignment="Right"
+                     Margin="0,0,8,0"
+                     IsVisible="{Binding UseShellEnvironment}"/>
+          <TextBox Grid.Row="13" Grid.Column="1"
+                   Height="28"
+                   CornerRadius="3"
+                   Text="{Binding CustomShellArgs, Mode=TwoWay}"
+                   Watermark="-l"
+                   IsVisible="{Binding UseShellEnvironment}"/>
         </Grid>
       </TabItem>
 

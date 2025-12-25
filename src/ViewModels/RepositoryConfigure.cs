@@ -89,6 +89,61 @@ namespace SourceGit.ViewModels
             }
         }
 
+        public bool UseShellEnvironment
+        {
+            get => _repo.Settings.UseShellEnvironment;
+            set
+            {
+                if (_repo.Settings.UseShellEnvironment != value)
+                {
+                    _repo.Settings.UseShellEnvironment = value;
+                    OnPropertyChanged();
+
+                    if (value)
+                        Native.ShellEnvironmentProvider.InvalidateCache(_repo.FullPath);
+                }
+            }
+        }
+
+        public string CustomShellPath
+        {
+            get => _repo.Settings.CustomShellPath;
+            set
+            {
+                if (_repo.Settings.CustomShellPath != value)
+                {
+                    _repo.Settings.CustomShellPath = value;
+                    OnPropertyChanged();
+                    Native.ShellEnvironmentProvider.InvalidateCache(_repo.FullPath);
+                }
+            }
+        }
+
+        public string CustomShellArgs
+        {
+            get => _repo.Settings.CustomShellArgs;
+            set
+            {
+                if (_repo.Settings.CustomShellArgs != value)
+                {
+                    _repo.Settings.CustomShellArgs = value;
+                    OnPropertyChanged();
+                    Native.ShellEnvironmentProvider.InvalidateCache(_repo.FullPath);
+                }
+            }
+        }
+
+        public string DetectedShell
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_repo.Settings.CustomShellPath))
+                    return _repo.Settings.CustomShellPath;
+                var detected = Native.ShellEnvironmentProvider.DetectUserShell();
+                return string.IsNullOrEmpty(detected) ? "(none detected)" : detected;
+            }
+        }
+
         public bool EnablePruneOnFetch
         {
             get;
