@@ -28,6 +28,8 @@ namespace SourceGit.ViewModels
 
         public bool CanSaveAsPatch { get; }
 
+        public bool CanResetFiles => _repository != null && !_repository.IsBare;
+
         public int TotalChanges
         {
             get => _totalChanges;
@@ -77,8 +79,14 @@ namespace SourceGit.ViewModels
         }
 
         public RevisionCompare(string repo, Models.Commit startPoint, Models.Commit endPoint)
+            : this(repo, null, startPoint, endPoint)
+        {
+        }
+
+        public RevisionCompare(string repo, Repository repository, Models.Commit startPoint, Models.Commit endPoint)
         {
             _repo = repo;
+            _repository = repository;
             _startPoint = (object)startPoint ?? new Models.Null();
             _endPoint = (object)endPoint ?? new Models.Null();
             CanSaveAsPatch = startPoint != null && endPoint != null;
@@ -88,6 +96,7 @@ namespace SourceGit.ViewModels
         public void Dispose()
         {
             _repo = null;
+            _repository = null;
             _startPoint = null;
             _endPoint = null;
             _changes?.Clear();
@@ -138,6 +147,58 @@ namespace SourceGit.ViewModels
             var succ = await Commands.SaveChangesAsPatch.ProcessRevisionCompareChangesAsync(_repo, changes ?? _changes, GetSHA(_startPoint), GetSHA(_endPoint), saveTo);
             if (succ)
                 App.SendNotification(_repo, App.Text("SaveAsPatchSuccess"));
+        }
+
+        public async Task ResetToSourceRevisionAsync(string path)
+        {
+            var sourceSHA = GetSHA(_startPoint);
+            if (string.IsNullOrEmpty(sourceSHA))
+                return;
+
+            var log = _repository?.CreateLog($"Reset File to '{sourceSHA}'");
+            await new Commands.Checkout(_repo).Use(log).FileWithRevisionAsync(path, sourceSHA);
+            log?.Complete();
+        }
+
+        public async Task ResetToTargetRevisionAsync(string path)
+        {
+            var targetSHA = GetSHA(_endPoint);
+            if (string.IsNullOrEmpty(targetSHA))
+                return;
+
+            var log = _repository?.CreateLog($"Reset File to '{targetSHA}'");
+            await new Commands.Checkout(_repo).Use(log).FileWithRevisionAsync(path, targetSHA);
+            log?.Complete();
+        }
+
+        public async Task ResetMultipleToSourceRevisionAsync(List<Models.Change> changes)
+        {
+            var sourceSHA = GetSHA(_startPoint);
+            if (string.IsNullOrEmpty(sourceSHA))
+                return;
+
+            var files = new List<string>();
+            foreach (var c in changes)
+                files.Add(c.Path);
+
+            var log = _repository?.CreateLog($"Reset Files to '{sourceSHA}'");
+            await new Commands.Checkout(_repo).Use(log).MultipleFilesWithRevisionAsync(files, sourceSHA);
+            log?.Complete();
+        }
+
+        public async Task ResetMultipleToTargetRevisionAsync(List<Models.Change> changes)
+        {
+            var targetSHA = GetSHA(_endPoint);
+            if (string.IsNullOrEmpty(targetSHA))
+                return;
+
+            var files = new List<string>();
+            foreach (var c in changes)
+                files.Add(c.Path);
+
+            var log = _repository?.CreateLog($"Reset Files to '{targetSHA}'");
+            await new Commands.Checkout(_repo).Use(log).MultipleFilesWithRevisionAsync(files, targetSHA);
+            log?.Complete();
         }
 
         public void ClearSearchFilter()
@@ -206,6 +267,7 @@ namespace SourceGit.ViewModels
         }
 
         private string _repo;
+        private Repository _repository = null;
         private bool _isLoading = true;
         private object _startPoint = null;
         private object _endPoint = null;
