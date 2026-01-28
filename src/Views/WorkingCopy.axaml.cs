@@ -260,24 +260,22 @@ namespace SourceGit.Views
             {
                 var change = selectedUnstaged[0];
                 var path = Native.OS.GetAbsPath(repo.FullPath, change.Path);
-                TryAddOpenFileToContextMenu(menu, path);
 
-                if (!change.IsConflicted || change.ConflictReason is Models.ConflictReason.BothAdded or Models.ConflictReason.BothModified)
+                if (!change.IsConflicted)
                 {
-                    var openMerger = new MenuItem();
-                    openMerger.Header = App.Text("OpenInExternalMergeTool");
-                    openMerger.Icon = App.CreateMenuIcon("Icons.OpenWith");
-                    openMerger.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+D" : "Ctrl+Shift+D";
-                    openMerger.Click += async (_, e) =>
-                    {
-                        if (change.IsConflicted)
-                            await vm.UseExternalMergeToolAsync(change);
-                        else
-                            vm.UseExternalDiffTool(change, true);
+                    TryAddOpenFileToContextMenu(menu, path);
 
-                        e.Handled = true;
+                    var diffWithMerger = new MenuItem();
+                    diffWithMerger.Header = App.Text("OpenInExternalMergeTool");
+                    diffWithMerger.Icon = App.CreateMenuIcon("Icons.OpenWith");
+                    diffWithMerger.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+D" : "Ctrl+Shift+D";
+                    diffWithMerger.Click += (_, ev) =>
+                    {
+                        vm.UseExternalDiffTool(change, false);
+                        ev.Handled = true;
                     };
-                    menu.Items.Add(openMerger);
+
+                    menu.Items.Add(diffWithMerger);
                 }
 
                 var explore = new MenuItem();
@@ -337,6 +335,31 @@ namespace SourceGit.Views
 
                     menu.Items.Add(useTheirs);
                     menu.Items.Add(useMine);
+
+                    if (change.ConflictReason is Models.ConflictReason.BothAdded or Models.ConflictReason.BothModified)
+                    {
+                        var mergeBuiltin = new MenuItem();
+                        mergeBuiltin.Header = App.Text("ChangeCM.Merge");
+                        mergeBuiltin.Icon = App.CreateMenuIcon("Icons.Conflict");
+                        mergeBuiltin.Click += async (_, e) =>
+                        {
+                            await App.ShowDialog(new ViewModels.MergeConflictEditor(repo, change.Path));
+                            e.Handled = true;
+                        };
+
+                        var mergeExternal = new MenuItem();
+                        mergeExternal.Header = App.Text("ChangeCM.MergeExternal");
+                        mergeExternal.Icon = App.CreateMenuIcon("Icons.OpenWith");
+                        mergeExternal.Click += async (_, e) =>
+                        {
+                            await vm.UseExternalMergeToolAsync(change);
+                            e.Handled = true;
+                        };
+
+                        menu.Items.Add(mergeBuiltin);
+                        menu.Items.Add(mergeExternal);
+                    }
+
                     menu.Items.Add(new MenuItem() { Header = "-" });
                 }
                 else
@@ -374,7 +397,7 @@ namespace SourceGit.Views
 
                     var patch = new MenuItem();
                     patch.Header = App.Text("FileCM.SaveAsPatch");
-                    patch.Icon = App.CreateMenuIcon("Icons.Diff");
+                    patch.Icon = App.CreateMenuIcon("Icons.Save");
                     patch.Click += async (_, e) =>
                     {
                         var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
@@ -780,7 +803,7 @@ namespace SourceGit.Views
 
                 var patch = new MenuItem();
                 patch.Header = App.Text("FileCM.SaveAsPatch");
-                patch.Icon = App.CreateMenuIcon("Icons.Diff");
+                patch.Icon = App.CreateMenuIcon("Icons.Save");
                 patch.Click += async (_, e) =>
                 {
                     var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
@@ -963,7 +986,7 @@ namespace SourceGit.Views
 
                 var patch = new MenuItem();
                 patch.Header = App.Text("FileCM.SaveAsPatch");
-                patch.Icon = App.CreateMenuIcon("Icons.Diff");
+                patch.Icon = App.CreateMenuIcon("Icons.Save");
                 patch.Click += async (_, e) =>
                 {
                     var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
@@ -1180,7 +1203,7 @@ namespace SourceGit.Views
 
                 var patch = new MenuItem();
                 patch.Header = App.Text("FileCM.SaveAsPatch");
-                patch.Icon = App.CreateMenuIcon("Icons.Diff");
+                patch.Icon = App.CreateMenuIcon("Icons.Save");
                 patch.Click += async (_, e) =>
                 {
                     var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
@@ -1290,7 +1313,7 @@ namespace SourceGit.Views
                         item.Icon = new Image { Width = 16, Height = 16, Source = tool.IconImage };
                         item.Click += (_, e) =>
                         {
-                            tool.Open(fullpath);
+                            tool.Launch(fullpath.Quoted());
                             e.Handled = true;
                         };
 

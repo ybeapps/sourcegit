@@ -615,18 +615,7 @@ namespace SourceGit.Views
                     ev.Handled = true;
                 };
 
-                var resetToFirstParent = new MenuItem();
-                resetToFirstParent.Header = App.Text("ChangeCM.CheckoutFirstParentRevision");
-                resetToFirstParent.Icon = App.CreateMenuIcon("Icons.File.Checkout");
-                resetToFirstParent.IsEnabled = commit.Parents.Count > 0;
-                resetToFirstParent.Click += async (_, ev) =>
-                {
-                    await vm.ResetToParentRevisionAsync(change);
-                    ev.Handled = true;
-                };
-
                 menu.Items.Add(resetToThisRevision);
-                menu.Items.Add(resetToFirstParent);
                 menu.Items.Add(new MenuItem() { Header = "-" });
 
                 if (repo.Remotes.Count > 0 && File.Exists(fullPath) && repo.IsLFSEnabled())
@@ -642,7 +631,7 @@ namespace SourceGit.Views
                     {
                         lfsLock.Click += async (_, e) =>
                         {
-                            await repo.LockLFSFileAsync(repo.Remotes[0].Name, change.Path);
+                            await repo.LockLFSFileAsync(repo.Remotes[0].Name, file.Path);
                             e.Handled = true;
                         };
                     }
@@ -655,7 +644,7 @@ namespace SourceGit.Views
                             lockRemote.Header = remoteName;
                             lockRemote.Click += async (_, e) =>
                             {
-                                await repo.LockLFSFileAsync(remoteName, change.Path);
+                                await repo.LockLFSFileAsync(remoteName, file.Path);
                                 e.Handled = true;
                             };
                             lfsLock.Items.Add(lockRemote);
@@ -670,7 +659,7 @@ namespace SourceGit.Views
                     {
                         lfsUnlock.Click += async (_, e) =>
                         {
-                            await repo.UnlockLFSFileAsync(repo.Remotes[0].Name, change.Path, false, true);
+                            await repo.UnlockLFSFileAsync(repo.Remotes[0].Name, file.Path, false, true);
                             e.Handled = true;
                         };
                     }
@@ -683,7 +672,7 @@ namespace SourceGit.Views
                             unlockRemote.Header = remoteName;
                             unlockRemote.Click += async (_, e) =>
                             {
-                                await repo.UnlockLFSFileAsync(remoteName, change.Path, false, true);
+                                await repo.UnlockLFSFileAsync(remoteName, file.Path, false, true);
                                 e.Handled = true;
                             };
                             lfsUnlock.Items.Add(unlockRemote);
