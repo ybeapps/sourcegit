@@ -149,25 +149,45 @@ namespace SourceGit.ViewModels
                 App.SendNotification(_repo, App.Text("SaveAsPatchSuccess"));
         }
 
-        public async Task ResetToSourceRevisionAsync(string path)
+        public async Task ResetToSourceRevisionAsync(Models.Change change)
         {
             var sourceSHA = GetSHA(_startPoint);
             if (string.IsNullOrEmpty(sourceSHA))
                 return;
 
             var log = _repository?.CreateLog($"Reset File to '{sourceSHA}'");
-            await new Commands.Checkout(_repo).Use(log).FileWithRevisionAsync(path, sourceSHA);
+
+            // If file is Added in diff, it doesn't exist in source - remove it
+            if (change.Index == Models.ChangeState.Added)
+            {
+                await new Commands.Remove(_repo).Use(log).File(change.Path).ExecAsync();
+            }
+            else
+            {
+                await new Commands.Checkout(_repo).Use(log).FileWithRevisionAsync(change.Path, sourceSHA);
+            }
+
             log?.Complete();
         }
 
-        public async Task ResetToTargetRevisionAsync(string path)
+        public async Task ResetToTargetRevisionAsync(Models.Change change)
         {
             var targetSHA = GetSHA(_endPoint);
             if (string.IsNullOrEmpty(targetSHA))
                 return;
 
             var log = _repository?.CreateLog($"Reset File to '{targetSHA}'");
-            await new Commands.Checkout(_repo).Use(log).FileWithRevisionAsync(path, targetSHA);
+
+            // If file is Deleted in diff, it doesn't exist in target - remove it
+            if (change.Index == Models.ChangeState.Deleted)
+            {
+                await new Commands.Remove(_repo).Use(log).File(change.Path).ExecAsync();
+            }
+            else
+            {
+                await new Commands.Checkout(_repo).Use(log).FileWithRevisionAsync(change.Path, targetSHA);
+            }
+
             log?.Complete();
         }
 
@@ -177,12 +197,31 @@ namespace SourceGit.ViewModels
             if (string.IsNullOrEmpty(sourceSHA))
                 return;
 
-            var files = new List<string>();
+            var filesToCheckout = new List<string>();
+            var filesToRemove = new List<string>();
+
+            // Separate files: Added files don't exist in source, so remove them
             foreach (var c in changes)
-                files.Add(c.Path);
+            {
+                if (c.Index == Models.ChangeState.Added)
+                    filesToRemove.Add(c.Path);
+                else
+                    filesToCheckout.Add(c.Path);
+            }
 
             var log = _repository?.CreateLog($"Reset Files to '{sourceSHA}'");
-            await new Commands.Checkout(_repo).Use(log).MultipleFilesWithRevisionAsync(files, sourceSHA);
+
+            if (filesToCheckout.Count > 0)
+                await new Commands.Checkout(_repo).Use(log).MultipleFilesWithRevisionAsync(filesToCheckout, sourceSHA);
+
+            if (filesToRemove.Count > 0)
+            {
+                var pathSpecFile = System.IO.Path.GetTempFileName();
+                await System.IO.File.WriteAllLinesAsync(pathSpecFile, filesToRemove);
+                await new Commands.Remove(_repo).Use(log).Files(pathSpecFile).ExecAsync();
+                System.IO.File.Delete(pathSpecFile);
+            }
+
             log?.Complete();
         }
 
@@ -192,12 +231,31 @@ namespace SourceGit.ViewModels
             if (string.IsNullOrEmpty(targetSHA))
                 return;
 
-            var files = new List<string>();
+            var filesToCheckout = new List<string>();
+            var filesToRemove = new List<string>();
+
+            // Separate files: Deleted files don't exist in target, so remove them
             foreach (var c in changes)
-                files.Add(c.Path);
+            {
+                if (c.Index == Models.ChangeState.Deleted)
+                    filesToRemove.Add(c.Path);
+                else
+                    filesToCheckout.Add(c.Path);
+            }
 
             var log = _repository?.CreateLog($"Reset Files to '{targetSHA}'");
-            await new Commands.Checkout(_repo).Use(log).MultipleFilesWithRevisionAsync(files, targetSHA);
+
+            if (filesToCheckout.Count > 0)
+                await new Commands.Checkout(_repo).Use(log).MultipleFilesWithRevisionAsync(filesToCheckout, targetSHA);
+
+            if (filesToRemove.Count > 0)
+            {
+                var pathSpecFile = System.IO.Path.GetTempFileName();
+                await System.IO.File.WriteAllLinesAsync(pathSpecFile, filesToRemove);
+                await new Commands.Remove(_repo).Use(log).Files(pathSpecFile).ExecAsync();
+                System.IO.File.Delete(pathSpecFile);
+            }
+
             log?.Complete();
         }
 

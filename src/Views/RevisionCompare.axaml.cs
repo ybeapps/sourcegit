@@ -114,7 +114,7 @@ namespace SourceGit.Views
                         resetToSource.Icon = App.CreateMenuIcon("Icons.File.Checkout");
                         resetToSource.Click += async (_, ev) =>
                         {
-                            await vm.ResetToSourceRevisionAsync(change.Path);
+                            await vm.ResetToSourceRevisionAsync(change);
                             ev.Handled = true;
                         };
 
@@ -123,7 +123,7 @@ namespace SourceGit.Views
                         resetToTarget.Icon = App.CreateMenuIcon("Icons.File.Checkout");
                         resetToTarget.Click += async (_, ev) =>
                         {
-                            await vm.ResetToTargetRevisionAsync(change.Path);
+                            await vm.ResetToTargetRevisionAsync(change);
                             ev.Handled = true;
                         };
 
